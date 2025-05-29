@@ -1,0 +1,58 @@
+name: CI/CD Pipeline for a Node.js Application
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: Ostad
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Tests and store test logs
+        run: |
+          mkdir -p test-result
+          npm check > test-result/test-results.txt
+          cat test-results.txt
+
+      - name: Upload Test Results to a Git Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results.txt
+
+  # deploy:
+  #   needs: test
+  #   runs-on: Ostad
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Download Test Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: test-results
+
+  #     - name: Show Artifact Test Results
+  #       run: cat test-results.txt
+
+  #     - name: Install Dependencies
+  #       run: npm install
+
+  #     - name: Deploy Application
+  #       run: |
+  #         pm2 delete node-app || true
+  #         pm2 start ./src/server.js --name node-app
+  #         pm2 save
