@@ -23,10 +23,8 @@ jobs:
 
       - name: Run Tests and store test logs
         run: |
-          mkdir -p test-result
-          npm check > test-result/test-results.txt
-          cat test-results.txt
-
+          npm check > test-results.txt
+      #          cat test-results.txt
       - name: Upload Test Results to a Git Artifact
         uses: actions/upload-artifact@v4
         with:
