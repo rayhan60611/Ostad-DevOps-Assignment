@@ -50,8 +50,8 @@ jobs:
         run: npm install
 
       - name: Deploy Application
-        shell: pwsh
         continue-on-error: true
         run: |
           pm2 kill
-          pm2 start ./src/server.js --name node-app
+          pm2 start server.js --name node-app
+          pm2 save
